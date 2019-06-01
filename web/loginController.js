@@ -10,7 +10,6 @@ var router = express.Router();
 router.post('/login', (req, res) => {
   const {code} = req.body;
   const session = req.cookies.s;
-  console.log(req.cookies)
   sessionService.checkSession({session, code}).then( ({exist, session=''}) => {
     if(exist) {
       res.json({

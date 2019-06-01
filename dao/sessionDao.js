@@ -23,12 +23,12 @@ function writeSession({session, openid}) {
 }
 
 function getOpenidBySession(session) {
-  const sql = `select openid from user where id in (select user_id from session_user_map where session_id = ?);  `
+  const sql = `select openid, id from user where id in (select user_id from session_user_map where session_id = ?);  `
   return db(sql, [session]).then((result) => {
     if(result.length) {
-      return Promise.resolve(result[0].openid)
+      return Promise.resolve({openid: result[0].openid, id: result[0].id})
     } else {
-      return Promise.resolve(null)
+      return Promise.resolve({openid: null, id: null})
     }
   }).catch(() => {
     return Promise.reject()

@@ -21,9 +21,35 @@ function getActivityList({count, offset}) {
   })
 }
 
+function getDetailById(userid) {
+  const sql = `select id, totalNumber, currentNumber, poster, title, subtitle, location, start_time, organizer, intro from activity where id = ?;`
+  return db(sql, [userid]).then(result => {
+    if(result.length) {
+      return Promise.resolve(result[0])
+    } else {
+      return Promise.resolve(null)
+    }
+  }).catch(err => {
+    return Promise.reject()
+  })
+}
+
+function getActivityNumberById(actionID) {
+  const sql = `select currentNumber, totalNumber from activity where id = ?;`
+  return db(sql, [actionID]).then(result => {
+    if(result.length) {
+      return Promise.resolve(result[0])
+    } else {
+      return Promise.resolve(null)
+    }
+  })
+}
+
 
 module.exports = {
   getReleasedAction,
   insertProjectInfo,
-  getActivityList
+  getActivityList,
+  getDetailById,
+  getActivityNumberById
 }

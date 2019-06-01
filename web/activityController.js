@@ -23,11 +23,33 @@ router.get('/getReleasedAction', (req, res) => {
 })
 
 router.get('/getEnrolledAction', (req, res) => {
-  
+  const session = req.cookies.s;
+  activityService.getEnrolledAction(session).then(list => {
+    res.json({
+      code: 200,
+      list
+    })
+  }).catch(code => {
+    res.json({
+      code
+    })
+  })
 })
 
 router.get('/getActionDetail', (req, res) => {
-  
+  const actionID = req.query.id;
+  const session = req.cookies.s;
+  activityService.getActionDetail({actionID, session}).then( ({detail, state, code}) => {
+    res.json({
+      code,
+      detail,
+      state
+    })
+  }).catch(errCode => {
+    res.json({
+      code: errCode
+    })
+  })
 })
 
 router.get('/getActionList', (req, res) => {
@@ -38,7 +60,6 @@ router.get('/getActionList', (req, res) => {
       list
     })
   }).catch((err) => {
-    console.log(err)
     res.json({
       code: 201
     })
@@ -62,7 +83,6 @@ router.post('/release', formidableMiddleware({
       code: 300
     })
   }).catch((err) => {
-    console.log(err)
     res.json({
       code: 301
     })

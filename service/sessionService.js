@@ -21,9 +21,10 @@ function genSessionAndWrite(code) {
   })
 }
 
+//检查session是否在表中,如果不在则生成session并写入
 function checkSession({session, code}) {
   if(session) {
-    return sessionDao.getOpenidBySession(session).then(openid => {
+    return sessionDao.getOpenidBySession(session).then( ({openid, id}) => {
       if(openid) {
         return Promise.resolve({exist: true, session: ''})
       } else {
@@ -43,10 +44,15 @@ function checkSession({session, code}) {
       return Promise.reject(err)
     })
   }
-  
+}
+
+//根据session返回用户id及openid
+function checkUserBySession(session) {
+  return sessionDao.getOpenidBySession(session)
 }
 
 module.exports = {
   checkSession,
-  genSessionAndWrite
+  genSessionAndWrite,
+  checkUserBySession
 }
